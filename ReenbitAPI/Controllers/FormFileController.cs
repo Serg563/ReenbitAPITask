@@ -11,7 +11,7 @@ namespace ReenbitAPI.Controllers
     [ApiController]
     public class FormFileController : ControllerBase
     {
-        private static string storedEmail = "plskrv8@gmail.com";
+        public string storedEmail = "plskrv8@gmail.com";
         IBlobService _blobservice;
         public FormFileController(IBlobService blobService)
         {
@@ -21,7 +21,7 @@ namespace ReenbitAPI.Controllers
         [HttpPost("UploadFile")]
         public async Task<IActionResult> UploadFile([FromForm] UploadForm form)
         {
-            if(form.Email is null)
+            if (form.Email is null || form.File == null)
             {
                 return BadRequest();
             }
@@ -34,6 +34,10 @@ namespace ReenbitAPI.Controllers
         [HttpGet("GetEmail")]
         public IActionResult GetEmail()
         {
+            if (string.IsNullOrEmpty(storedEmail))
+            {
+                return BadRequest();
+            }
             string email = storedEmail;
             return Ok(email);
         }

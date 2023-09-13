@@ -1,5 +1,6 @@
 using Azure.Storage.Blobs;
 using ReenbitAPI.Services;
+using System.Runtime.CompilerServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,10 +17,19 @@ builder.Services.AddSingleton(q =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseSwagger();
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    
     app.UseSwaggerUI();
+}
+else
+{
+    app.UseSwaggerUI(s =>
+    {
+        s.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        s.RoutePrefix = string.Empty;
+    });
 }
 
 app.UseHttpsRedirection();
